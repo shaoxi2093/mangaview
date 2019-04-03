@@ -26,15 +26,27 @@ const getMangaImgArr = (data) => {
     });
   
     const page = await browser.newPage();
-    await page.goto(options.url);
-  
-    await page.waitFor(2000)
+    page.setDefaultNavigationTimeout(150000) //设置超时默认超时时间 150秒
+    page.goto(options.url);
+    let searchInput = await page.$$(options.selectors.searchInput)
+    while(!searchInput.length){
+      await page.waitFor(1000)
+      searchInput = await page.$$(options.selectors.searchInput)
+    }
     await page.click(options.selectors.searchInput)
     await page.type(options.selectors.searchInput, data)
     await page.click(options.selectors.searchBtn)
+    let pages = await browser.pages()
+    if(options.selectors.searchOut) {
+      while(pages.length <= 2){
+        await page.waitFor(1000)
+        pages = await browser.pages
+      }
+    }
+    
+    const page2 = options.selectors.searchOut ? pages[2] : page
+    const searchList = await page2.$$('.wordList')
 
-    const page2 = options.selectors.searchOut ? (await browser.pages())[2] : page
-    const searchList = page2.$$(options.selectors.searchResults)
     for(let item of searchList){
       console.log(item.innerText)
     }
