@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 
-const getMangaImgArr = (data) => {
+const getMangaIndexArr = (data) => {
   return async (options) => {
     const defaultOpts = {
       url: 'http://www.pufei.net',
@@ -52,9 +52,11 @@ const getMangaImgArr = (data) => {
       }, item)
     }
 
+    
     // await browser.close();
   }
 }
 
 
-getMangaImgArr("百炼成神")()
+
+getMangaIndexArr("百炼成神")()
